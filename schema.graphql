@@ -8,6 +8,8 @@ type Set @entity {
   name: String!
   symbol: String!
 
+  disabled: Boolean!
+
   created: BigInt!
   createdAtBlock: BigInt!
   createdAtTransaction: Bytes!
