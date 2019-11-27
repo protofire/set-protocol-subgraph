@@ -1,0 +1,17 @@
+{
+  "name": "set-protocol-subgraph",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ protofire/set-protocol",
+    "create-local": "graph create --node http://localhost:8020/ protofire/set-protocol",
+    "remove-local": "graph remove --node http://localhost:8020/ protofire/set-protocol",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 protofire/set-protocol"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.16.2",
+    "@graphprotocol/graph-ts": "0.16.0"
+  }
+}

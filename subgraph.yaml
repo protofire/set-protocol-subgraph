@@ -1,0 +1,24 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: Core
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Core
+      address: '0xf55186cc537e7067ea616f2aae007b4427a120c8'
+      startBlock: 7536585
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/core.ts
+      abis:
+        - name: Core
+          file: ./abis/Core.json
+      entities:
+        - Set
+      eventHandlers:
+        - event: SetTokenCreated(indexed address,address,address[],uint256[],uint256,bytes32,bytes32)
+          handler: handleSetTokenCreated

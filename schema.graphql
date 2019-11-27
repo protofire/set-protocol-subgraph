@@ -1,0 +1,14 @@
+type Set @entity {
+  id: ID!
+  address: Bytes!
+  factory: Bytes!
+  components: [Bytes!]!
+  units: [BigInt!]!
+  naturalUnit: BigInt!
+  name: String!
+  symbol: String!
+
+  created: BigInt!
+  createdAtBlock: BigInt!
+  createdAtTransaction: Bytes!
+}
