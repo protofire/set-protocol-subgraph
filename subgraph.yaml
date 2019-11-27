@@ -18,6 +18,10 @@ dataSources:
         - name: Core
           file: ./abis/Core.json
       entities:
+        - Exchange
+        - Factory
+        - Module
+        - PriceLibrary
         - Set
       eventHandlers:
         - event: SetTokenCreated(indexed address,address,address[],uint256[],uint256,bytes32,bytes32)
@@ -30,3 +34,19 @@ dataSources:
           handler: handleSetDisabled
         - event: SetReenabled(address)
           handler: handleSetReenabled
+        - event: ExchangeAdded(uint8,address)
+          handler: handleExchangeAdded
+        - event: ExchangeRemoved(uint8)
+          handler: handleExchangeRemoved
+        - event: FactoryAdded(address)
+          handler: handleFactoryAdded
+        - event: FactoryRemoved(address)
+          handler: handleFactoryRemoved
+        - event: ModuleAdded(address)
+          handler: handleModuleAdded
+        - event: ModuleRemoved(address)
+          handler: handleModuleRemoved
+        - event: PriceLibraryAdded(address)
+          handler: handlePriceLibraryAdded
+        - event: PriceLibraryRemoved(address)
+          handler: handlePriceLibraryRemoved

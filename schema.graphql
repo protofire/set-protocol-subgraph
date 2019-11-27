@@ -14,3 +14,55 @@ type Set @entity {
   createdAtBlock: BigInt!
   createdAtTransaction: Bytes!
 }
+
+type Exchange @entity {
+  id: ID!
+  address: Bytes!
+
+  created: BigInt!
+  createdAtBlock: BigInt!
+  createdAtTransaction: Bytes!
+
+  removed: BigInt
+  removedAtBlock: BigInt
+  removedAtTransaction: Bytes
+}
+
+type Factory @entity {
+  id: ID!
+  address: Bytes!
+
+  created: BigInt!
+  createdAtBlock: BigInt!
+  createdAtTransaction: Bytes!
+
+  removed: BigInt
+  removedAtBlock: BigInt
+  removedAtTransaction: Bytes
+}
+
+type Module @entity {
+  id: ID!
+  address: Bytes!
+
+  created: BigInt!
+  createdAtBlock: BigInt!
+  createdAtTransaction: Bytes!
+
+  removed: BigInt
+  removedAtBlock: BigInt
+  removedAtTransaction: Bytes
+}
+
+type PriceLibrary @entity {
+  id: ID!
+  address: Bytes!
+
+  created: BigInt!
+  createdAtBlock: BigInt!
+  createdAtTransaction: Bytes!
+
+  removed: BigInt
+  removedAtBlock: BigInt
+  removedAtTransaction: Bytes
+}
