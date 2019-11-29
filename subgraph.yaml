@@ -50,3 +50,23 @@ dataSources:
           handler: handlePriceLibraryAdded
         - event: PriceLibraryRemoved(address)
           handler: handlePriceLibraryRemoved
+  - name: RebalanceAuctionModule
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: RebalanceAuctionModule
+      address: '0xe23fb31dd2edacebf7d92720358bb92445f47fdb'
+      startBlock: 8358158
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/core/modules/rebalance-auction.ts
+      abis:
+        - name: RebalanceAuctionModule
+          file: ./abis/RebalanceAuctionModule.json
+      entities:
+        - Bid
+      eventHandlers:
+        - event: BidPlaced(indexed address,indexed address,uint256,address[],uint256[],uint256[])
+          handler: handleBidPlaced

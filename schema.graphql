@@ -66,3 +66,17 @@ type PriceLibrary @entity {
   removedAtBlock: BigInt
   removedAtTransaction: Bytes
 }
+
+type Bid @entity {
+  id: ID!
+  rebalancingSetToken: Bytes!
+  bidder: Bytes!
+  executionQuantity: BigInt!
+  combinedTokenAddresses: [Bytes!]!
+  inflowTokenUnits: [BigInt!]!
+  outflowTokenUnits: [BigInt!]!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
