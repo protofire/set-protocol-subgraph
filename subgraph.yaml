@@ -50,6 +50,28 @@ dataSources:
           handler: handlePriceLibraryAdded
         - event: PriceLibraryRemoved(address)
           handler: handlePriceLibraryRemoved
+  - name: RebalancingSetIssuanceModule
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: RebalancingSetIssuanceModule
+      address: '0xceda8318522d348f1d1aca48b24629b8fbf09020'
+      startBlock: 8112412
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/core/modules/rebalancing-set-issuance.ts
+      abis:
+        - name: RebalancingSetIssuanceModule
+          file: ./abis/RebalancingSetIssuanceModule.json
+      entities:
+        - Bid
+      eventHandlers:
+        - event: LogRebalancingSetIssue(indexed address,indexed address,uint256)
+          handler: handleLogRebalancingSetIssue
+        - event: LogRebalancingSetRedeem(indexed address,indexed address,uint256)
+          handler: handleLogRebalancingSetRedeem
   - name: RebalanceAuctionModule
     kind: ethereum/contract
     network: mainnet

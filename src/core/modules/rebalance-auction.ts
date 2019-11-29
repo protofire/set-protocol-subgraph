@@ -1,8 +1,8 @@
 import { Bytes } from '@graphprotocol/graph-ts'
 
-import { BidPlaced } from '../../generated/RebalanceAuctionModule/RebalanceAuctionModule'
+import { BidPlaced } from '../../../generated/RebalanceAuctionModule/RebalanceAuctionModule'
 
-import { Bid } from '../../generated/schema'
+import { Bid } from '../../../generated/schema'
 
 export function handleBidPlaced(event: BidPlaced): void {
   let bid = new Bid(event.transaction.hash.toHexString() + '-' + event.logIndex.toString())

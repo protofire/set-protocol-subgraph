@@ -80,3 +80,25 @@ type Bid @entity {
   block: BigInt!
   transaction: Bytes!
 }
+
+type RebalancingSetIssue @entity {
+  id: ID!
+  rebalancingSetAddress: Bytes!
+  callerAddress: Bytes!
+  rebalancingSetQuantity: BigInt!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type RebalancingSetRedeem @entity {
+  id: ID!
+  rebalancingSetAddress: Bytes!
+  callerAddress: Bytes!
+  rebalancingSetQuantity: BigInt!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
