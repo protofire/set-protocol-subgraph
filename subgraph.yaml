@@ -66,7 +66,8 @@ dataSources:
         - name: RebalancingSetIssuanceModule
           file: ./abis/RebalancingSetIssuanceModule.json
       entities:
-        - Bid
+        - RebalancingSetIssue
+        - RebalancingSetRedeem
       eventHandlers:
         - event: LogRebalancingSetIssue(indexed address,indexed address,uint256)
           handler: handleLogRebalancingSetIssue
@@ -92,3 +93,26 @@ dataSources:
       eventHandlers:
         - event: BidPlaced(indexed address,indexed address,uint256,address[],uint256[],uint256[])
           handler: handleBidPlaced
+  - name: RebalancingSetExchangeIssuanceModule
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: RebalancingSetExchangeIssuanceModule
+      address: '0xd4240987d6f92b06c8b5068b1e4006a97c47392b'
+      startBlock: 8442613
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/core/modules/rebalancing-set-exchange-issuance.ts
+      abis:
+        - name: RebalancingSetExchangeIssuanceModule
+          file: ./abis/RebalancingSetExchangeIssuanceModule.json
+      entities:
+        - PayableExchangeIssue
+        - PayableExchangeRedeem
+      eventHandlers:
+        - event: LogPayableExchangeIssue(indexed address,indexed address,address,uint256,uint256)
+          handler: handleLogPayableExchangeIssue
+        - event: LogPayableExchangeRedeem(indexed address,indexed address,address,uint256,uint256)
+          handler: handleLogPayableExchangeRedeem

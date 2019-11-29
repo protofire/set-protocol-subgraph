@@ -102,3 +102,29 @@ type RebalancingSetRedeem @entity {
   block: BigInt!
   transaction: Bytes!
 }
+
+type PayableExchangeIssue @entity {
+  id: ID!
+  rebalancingSetAddress: Bytes!
+  callerAddress: Bytes!
+  paymentTokenAddress: Bytes!
+  rebalancingSetQuantity: BigInt!
+  paymentTokenReturned: BigInt!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type PayableExchangeRedeem @entity {
+  id: ID!
+  rebalancingSetAddress: Bytes!
+  callerAddress: Bytes!
+  outputTokenAddress: Bytes!
+  rebalancingSetQuantity: BigInt!
+  outputTokenQuantity: BigInt!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
