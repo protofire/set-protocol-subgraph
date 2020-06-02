@@ -1,23 +1,36 @@
 type Set @entity {
   id: ID!
+
   address: Bytes!
-  factory: Bytes!
   components: [Bytes!]!
-  units: [BigInt!]!
+  factory: SetFactory!
   naturalUnit: BigInt!
   name: String!
   symbol: String!
+  units: [BigInt!]!
+
+  entryFee: BigDecimal
+  feeRecipient: Bytes
+  liquidator: Bytes
+  manager: Bytes
+
+  state: SetState!
+  supply: BigDecimal!
 
   disabled: Boolean!
 
   created: BigInt!
   createdAtBlock: BigInt!
   createdAtTransaction: Bytes!
+
+  events: [SetEvent!] @derivedFrom(field: "setToken")
 }
 
-type Exchange @entity {
+type SetFactory @entity {
   id: ID!
   address: Bytes!
+  name: String
+  setCount: BigInt!
 
   created: BigInt!
   createdAtBlock: BigInt!
@@ -26,9 +39,18 @@ type Exchange @entity {
   removed: BigInt
   removedAtBlock: BigInt
   removedAtTransaction: Bytes
+
+  sets: [Set!]! @derivedFrom(field: "factory")
 }
 
-type Factory @entity {
+enum SetState {
+  DEFAULT
+  PROPOSAL
+  REBALANCE
+  DRAWDOWN
+}
+
+type Exchange @entity {
   id: ID!
   address: Bytes!
 
@@ -123,6 +145,120 @@ type PayableExchangeRedeem @entity {
   outputTokenAddress: Bytes!
   rebalancingSetQuantity: BigInt!
   outputTokenQuantity: BigInt!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+interface SetEvent {
+  id: ID!
+  setToken: Set!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type EntryFeePaymentEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  feeRecipient: Bytes!
+  feeQuantity: BigDecimal!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type IncentiveFeePaymentEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  feeRecipient: Bytes!
+  feeQuantity: BigDecimal!
+  feePercentage: BigDecimal!
+  newUnitShares: BigInt!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type IssuanceEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  amount: BigDecimal!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type RedemptionEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  amount: BigDecimal!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type TransferEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  from: Bytes!
+  to: Bytes!
+  amount: BigDecimal!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type RebalanceProposalEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  auctionLibrary: Bytes!
+  proposalPeriodEndTime: BigInt!
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type RebalanceStartEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  oldSet: Bytes!
+  newSet: Bytes!
+  rebalanceIndex: BigInt
+  currentSetQuantity: BigDecimal
+
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+}
+
+type RebalanceSettlementEvent implements SetEvent @entity {
+  id: ID!
+  setToken: Set!
+
+  newUnits: [BigInt!]!
+
+  feeRecipient: Bytes
+  feeQuantity: BigInt
+  feePercentage: BigInt
+  rebalanceIndex: BigInt
+  issueQuantity: BigDecimal
+  unitShares: BigInt
 
   timestamp: BigInt!
   block: BigInt!

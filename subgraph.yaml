@@ -1,6 +1,7 @@
 specVersion: 0.0.2
 schema:
   file: ./schema.graphql
+
 dataSources:
   - name: Core
     kind: ethereum/contract
@@ -11,12 +12,14 @@ dataSources:
       startBlock: 7536585
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/core/index.ts
       abis:
         - name: Core
           file: ./abis/Core.json
+        - name: SetToken
+          file: ./abis/SetToken.json
       entities:
         - Exchange
         - Factory
@@ -59,7 +62,7 @@ dataSources:
       startBlock: 8112412
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/core/modules/rebalancing-set-issuance.ts
       abis:
@@ -82,7 +85,7 @@ dataSources:
       startBlock: 8358158
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/core/modules/rebalance-auction.ts
       abis:
@@ -102,7 +105,7 @@ dataSources:
       startBlock: 8442613
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/core/modules/rebalancing-set-exchange-issuance.ts
       abis:
@@ -116,3 +119,100 @@ dataSources:
           handler: handleLogPayableExchangeIssue
         - event: LogPayableExchangeRedeem(indexed address,indexed address,address,uint256,uint256)
           handler: handleLogPayableExchangeRedeem
+
+templates:
+  # Handle fixed Set tokens
+  - name: SetToken
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: SetToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/core/tokens/set-token.ts
+      entities:
+        - Set
+        - SetToken
+        - TransferEvent
+      abis:
+        - name: SetToken
+          file: ./abis/SetToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
+  # Handle legacy version of Rebalancing Set tokens (V1)
+  - name: RebalancingSetTokenV1
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: RebalancingSetToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/core/tokens/rebalancing-set-token-legacy.ts
+      entities:
+        - RebalanceProposalEvent
+        - RebalanceSettlementEvent
+        - RebalanceStartEvent
+        - Set
+      abis:
+        - name: RebalancingSetToken
+          file: ./abis/RebalancingSetToken.json
+        - name: SetToken
+          file: ./abis/SetToken.json
+      eventHandlers:
+        - event: RebalanceProposed(address,indexed address,indexed uint256)
+          handler: handleRebalanceProposal
+        - event: RebalanceStarted(address,address)
+          handler: handleRebalanceStart
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      callHandlers:
+        - function: settleRebalance()
+          handler: handleRebalanceSettle
+
+  # Supports RebalancingSetTokenV2 and RebalancingSetTokenV3 contracts
+  - name: RebalancingSetToken
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: RebalancingSetTokenV3
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/core/tokens/rebalancing-set-token.ts
+      entities:
+        - RebalanceSettlementEvent
+        - RebalanceStartEvent
+        - Set
+      abis:
+        - name: RebalancingSetToken
+          file: ./abis/RebalancingSetTokenV2.json
+        - name: RebalancingSetTokenV3
+          file: ./abis/RebalancingSetTokenV3.json
+        - name: SetToken
+          file: ./abis/SetToken.json
+      eventHandlers:
+        - event: EntryFeePaid(indexed address,uint256)
+          handler: handleEntryFeePaid
+        - event: IncentiveFeePaid(indexed address,uint256,uint256,uint256)
+          handler: handleIncentiveFeePaid
+        - event: NewEntryFee(uint256,uint256)
+          handler: handleNewEntryFee
+        - event: NewFeeRecipient(address,address)
+          handler: handleNewFeeRecipient
+        - event: NewLiquidatorAdded(address,address)
+          handler: handleNewLiquidatorAdded
+        - event: NewManagerAdded(address,address)
+          handler: handleNewManagerAdded
+        - event: RebalanceSettled(indexed address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleRebalanceSettle
+        - event: RebalanceStarted(address,address,uint256,uint256)
+          handler: handleRebalanceStart
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
